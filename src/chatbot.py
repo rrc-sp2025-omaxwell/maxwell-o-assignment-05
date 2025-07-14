@@ -27,22 +27,24 @@ VALID_TASKS = [
     "exit"
 ]
 
-def get_account_number(self):
+def get_account_number()->int:
     # Account num input validation
-    try:
-        # Arrange
-        account_number = input(f"Enter account number: ")
-        # Act
-        if account_number in ACCOUNTS:
-            # Assert
-            return account_number
-    
-    # Exception types
-    except TypeError as e:
-        print(f"Account number must be a numeric type. {e}")
-    except ValueError as e:
-        print(f"Account number entered does not exist. {e}")
-    
+    """
+    Returns account numbers found in the ACCOUNTS dict.
+
+    args:
+    input (int): a user input to be compared to ACCOUNTS
+    """
+
+    account_number = input(f"Enter account number: ")
+    if type(account_number) != int:
+        raise TypeError("Account number must be an int type.")
+            
+    if account_number in ACCOUNTS:
+        return account_number 
+    else:
+        raise ValueError("Account number entered does not exist.")
+        
 
 def chatbot():
     """Performs the Chatbot functionality."""
@@ -57,3 +59,4 @@ def chatbot():
 
 if __name__ == "__main__":
     chatbot()
+
