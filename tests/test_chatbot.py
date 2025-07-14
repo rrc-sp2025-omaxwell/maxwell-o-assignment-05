@@ -37,7 +37,7 @@ class chatbot(unittest.TestCase):
             expected = ValueError("Account number entered does not exist.")
             self.assertEqual(str(expected), str(context.exception))
         
-    def test_get_account_number_typeerror(self)->int:
+    def test_get_account_number_TypeError(self)->int:
 
     # Arrange
         user_input = "abcdefg"
@@ -50,3 +50,16 @@ class chatbot(unittest.TestCase):
             # Assert
             expected = TypeError("Account number must be an int type.")
             self.assertEqual(str(expected), str(context.exception))
+
+    def test_get_account_number_valid_account(self)->int:
+
+        # Arrange
+        user_input = 123456
+        with patch('builtins.input', return_value=user_input):
+            
+            # Act
+            actual = get_account_number()
+
+            # Assert
+            expected = 123456
+            self.assertEqual(expected, actual)
