@@ -14,6 +14,6 @@ vfrom unittest import TestCase, main
 from unittest.mock import patch
 from src.chatbot import ACCOUNTS, VALID_TASKS
 
-__author__ = ""
-__version__ = ""
+__author__ = "Owen Maxwell"
+__version__ = "1.0.0"
 __credits__ = "COMP-1327 Faculty"
