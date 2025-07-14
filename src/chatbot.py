@@ -36,7 +36,7 @@ def get_account_number()->int:
     input (int): a user input to be compared to ACCOUNTS
     """
 
-    account_number = input(f"Enter account number: ")
+    account_number = input("Enter account number: ")
     if type(account_number) != int:
         raise TypeError("Account number must be an int type.")
             
@@ -44,7 +44,17 @@ def get_account_number()->int:
         return account_number 
     else:
         raise ValueError("Account number entered does not exist.")
-        
+
+def get_amount()->float:
+    deposit_amount = input("Enter an amount:")
+    if type(deposit_amount) != int or float:
+        raise TypeError("Amount must be a numeric type.")
+    
+    elif deposit_amount <= 0:
+        raise ValueError("Amount must be a value greater than zero.")
+    
+    else:
+        return deposit_amount
 
 def chatbot():
     """Performs the Chatbot functionality."""
