@@ -12,7 +12,7 @@ Example:
 import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
-from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount
+from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount, get_balance
 
 
 #import sys
@@ -116,3 +116,9 @@ class chatbot(unittest.TestCase):
             # Assert
             expected = TypeError("Amount must be a numeric type.")
             self.assertEqual(str(expected), str(context.exception))
+
+    # get_balance testing
+
+    # NON INT INPUT
+
+    def test_get_balance_TypeError(self)->str:

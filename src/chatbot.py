@@ -64,6 +64,29 @@ def get_amount()->float:
     
     else:
         return deposit_amount
+    
+def get_balance(account_num: int)->str:
+    """
+    Returns a balance statement as a string containing
+    account number and balance in a currency format.
+
+    Args:
+    integer: account number / key to access ACCOUNTS dictionary
+    """
+    account_num = input("Please input an account number: ")
+    if account_num != int:
+        raise TypeError("Account number must be an int type.")
+    
+    elif account_num not in ACCOUNTS:
+        raise ValueError("Account number entered does not exist.")
+    
+    else:
+        balance = ACCOUNTS[account_num]
+        balance_formatted = f"${balance:,.2f}"
+        return f"Your current balance for account {account_num} is {balance_formatted}."
+
+
+    
 
 def chatbot():
     """Performs the Chatbot functionality."""
