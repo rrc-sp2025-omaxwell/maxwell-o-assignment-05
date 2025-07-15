@@ -172,3 +172,18 @@ class chatbot(unittest.TestCase):
             expected = "Your current balance for account 123456 is $1,000.00."
             self.assertEqual(str(expected), str(actual))
     
+    # make_deposit testing
+
+    def test_make_deposit_TypeError(self):
+        # Arrange
+        account_input = 
+        deposit_input = 
+
+        with patch('builtins.input', account_return_value=account_input, deposit_return_value=deposit_input):
+            
+            # Act
+            with self.assertRaises(ValueError) as context:
+                get_balance(account_input: int, deposit_input: int)
+            # Assert
+            expected = ValueError("Account number entered does not exist.")
+            self.assertEqual(str(expected), str(context.exception))
