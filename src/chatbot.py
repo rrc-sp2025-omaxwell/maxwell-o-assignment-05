@@ -46,10 +46,19 @@ def get_account_number()->int:
         raise ValueError("Account number entered does not exist.")
 
 def get_amount()->float:
+    """
+    Returns deposit amount as float when value above zero.
+    args:
+    input(int or float): user inout that must be above zero.
+    """
+    # Accepts any data type as input, verifies type in next step
     deposit_amount = input("Enter an amount:")
-    if type(deposit_amount) != int or float:
+    
+    # raises TypeError ONLY if type is str
+    if type(deposit_amount) == str:
         raise TypeError("Amount must be a numeric type.")
     
+    # raises ValueError if less than or equal to zero.
     elif deposit_amount <= 0:
         raise ValueError("Amount must be a value greater than zero.")
     

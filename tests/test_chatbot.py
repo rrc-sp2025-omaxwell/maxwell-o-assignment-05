@@ -12,7 +12,7 @@ Example:
 import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
-from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number
+from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount
 
 
 #import sys
@@ -23,6 +23,8 @@ __version__ = "1.0.0"
 __credits__ = "COMP-1327 Faculty"
 
 class chatbot(unittest.TestCase):
+
+    # ValueError / WRONG NUMBER TESTING
     def test_get_account_number_ValueError(self)->int:
 
         # Arrange
@@ -36,7 +38,8 @@ class chatbot(unittest.TestCase):
             # Assert
             expected = ValueError("Account number entered does not exist.")
             self.assertEqual(str(expected), str(context.exception))
-        
+
+    # TypeError / NON NUMERIC TESTING    
     def test_get_account_number_TypeError(self)->int:
 
     # Arrange
@@ -51,6 +54,7 @@ class chatbot(unittest.TestCase):
             expected = TypeError("Account number must be an int type.")
             self.assertEqual(str(expected), str(context.exception))
 
+    # IS VALID ACCOUNT TESTING
     def test_get_account_number_valid_account(self)->int:
 
         # Arrange
@@ -63,3 +67,52 @@ class chatbot(unittest.TestCase):
             # Assert
             expected = 123456
             self.assertEqual(expected, actual)
+
+
+    # get_amount testing
+
+    # NEGATIVE NUM VAL INPUT
+    def test_get_amount_negative(self)->float:
+
+    # Arrange
+        user_input = -1
+        with patch('builtins.input', return_value=user_input):
+            
+            # Act
+            with self.assertRaises(ValueError) as context:
+                get_amount()
+
+            # Assert
+            expected = ValueError("Amount must be a value greater than zero.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # NUM VAL ZERO INPUT
+    def test_get_amount_zero(self)->float:
+
+    # Arrange
+        user_input = 0
+        with patch('builtins.input', return_value=user_input):
+            
+            # Act
+            with self.assertRaises(ValueError) as context:
+                get_amount()
+
+            # Assert
+            expected = ValueError("Amount must be a value greater than zero.")
+            self.assertEqual(str(expected), str(context.exception))
+    
+
+    # NON NUMERIC / STRING INPUT
+    def test_get_amount_string(self)->float:
+
+    # Arrange
+        user_input = "abcdefg"
+        with patch('builtins.input', return_value=user_input):
+            
+            # Act
+            with self.assertRaises(TypeError) as context:
+                get_amount()
+
+            # Assert
+            expected = TypeError("Amount must be a numeric type.")
+            self.assertEqual(str(expected), str(context.exception))
