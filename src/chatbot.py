@@ -65,7 +65,7 @@ def get_amount()->float:
     else:
         return deposit_amount
     
-def get_balance(account_num: int):
+def get_balance(account_num: int) -> str:
     """
     Returns a balance statement as a string containing
     account number and balance in a currency format.
@@ -86,28 +86,27 @@ def get_balance(account_num: int):
         balance_formatted = f"${balance:,.2f}"
         return f"Your current balance for account {account_num} is {balance_formatted}."
 
-def get_balance(account_num: int, deposit_amount: int):
+def make_deposit(account_num: int, deposit_amount: int) -> str:
 
     account_num = input("Please input an account number: ")
     deposit_amount = input("Please input an deposit amount: ")
+    
 
-    if account_num is not None:
-        if type(account_num) != int:
-            raise TypeError("Account number must be an int type.")
-        elif account_num not in ACCOUNTS:
-            raise ValueError("Account number entered does not exist.")
-            
-        
-    if deposit_amount is not None:
-        if type(deposit_amount) != int or float:
-            raise TypeError("Account number must be a numeric type.")
-        elif account_num <= 0:
-            raise ValueError("Deposit amount must be greater than zero.")
-        else:
-            deposit_formatted = f"${deposit_amount}:,.2f"
-
+    if type(account_num) != int:
+        raise TypeError("Account number must be an int type.")
+    
+    elif account_num not in ACCOUNTS:
+        raise ValueError("Account number entered does not exist.")
+    
+    elif type(deposit_amount) == str:
+        raise TypeError("Deposit amount must be a numeric type.")
+    
+    elif deposit_amount <= 0:
+        raise ValueError("Deposit amount must be greater than zero.")
     else:
-        return f"You have made a deposit of {deposit_formatted} to account #{account_num}."
+        deposit_formatted = f"${deposit_amount:,.2f}"
+    
+    return f"You have made a deposit of {deposit_formatted} to account #{account_num}."
 
 
 def chatbot():

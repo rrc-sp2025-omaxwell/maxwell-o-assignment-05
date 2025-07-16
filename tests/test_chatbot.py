@@ -13,7 +13,7 @@ Example:
 import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
-from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount, get_balance
+from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount, get_balance, make_deposit
 
 
 #import sys
@@ -24,9 +24,11 @@ __version__ = "1.0.0"
 __credits__ = "COMP-1327 Faculty"
 
 # default text string for testing
-STRING_INPUT = "abcdefg"
+STRING_INPUT = str("abcdefg")
 # default incorrect number input
-WRONG_NUM_INPUT = 1111111111
+WRONG_NUM_INPUT = int(1111111111)
+# default valid input for testing
+VALID_ACCOUNT_NUM = int(123456)
 
 class chatbot(unittest.TestCase):
 
@@ -162,7 +164,7 @@ class chatbot(unittest.TestCase):
     def test_get_balance_expected_result(self)->str:
         # Arrange
 
-        user_input = 123456
+        user_input = VALID_ACCOUNT_NUM
 
         with patch('builtins.input', return_value=user_input):
             
@@ -174,16 +176,102 @@ class chatbot(unittest.TestCase):
     
     # make_deposit testing
 
-    def test_make_deposit_TypeError(self):
-        # Arrange
-        account_input = 
-        deposit_input = 
+    # testing for account_input TypeError ONLY
 
-        with patch('builtins.input', account_return_value=account_input, deposit_return_value=deposit_input):
+    def test_make_deposit_account_TypeError(self):
+        # Arrange
+        account_num = STRING_INPUT
+        deposit_amount = None
+        with patch('builtins.input', account_return_value=account_num, deposit_return_value = deposit_amount):
             
             # Act
+            with self.assertRaises(TypeError) as context:
+                make_deposit(account_num, deposit_amount)
+            # Assert
+            expected = TypeError("Account number must be an int type.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # Raises exception when account number not in dictionary
+
+    def test_make_deposit_account_ValueError(self):
+        # Arrange
+        with patch('builtins.input') as mock_input:
+            mock_input.side_effect = [WRONG_NUM_INPUT, None]
+            
+            # Act
+
             with self.assertRaises(ValueError) as context:
-                get_balance(account_input: int, deposit_input: int)
+                make_deposit(WRONG_NUM_INPUT, None)
             # Assert
             expected = ValueError("Account number entered does not exist.")
             self.assertEqual(str(expected), str(context.exception))
+
+    # Raise exception when amount entered is not numeric
+    def test_make_deposit_amount_non_numeric(self):
+        # Arrange
+
+        with patch('builtins.input') as mock_input:
+            mock_input.side_effect = [VALID_ACCOUNT_NUM, STRING_INPUT]
+            
+            # Act
+
+            with self.assertRaises(TypeError) as context:
+                make_deposit(VALID_ACCOUNT_NUM, STRING_INPUT)
+
+            # Assert
+            expected = TypeError("Deposit amount must be a numeric type.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # Raise Exception when the amount entered is zero
+
+    def test_make_deposit_amount_zero(self):
+        # Arrange
+
+        with patch('builtins.input') as mock_input:
+            mock_input.side_effect = [VALID_ACCOUNT_NUM, 0]
+            
+            # Act
+
+            with self.assertRaises(ValueError) as context:
+                make_deposit(VALID_ACCOUNT_NUM, 0)
+
+            # Assert
+            expected = ValueError("Deposit amount must be greater than zero.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # Raise Exception when the amount entered is negative
+
+    def test_make_deposit_amount_negative(self):
+        # Arrange
+
+        with patch('builtins.input') as mock_input:
+            mock_input.side_effect = [VALID_ACCOUNT_NUM, -1234]
+            
+            # Act
+
+            with self.assertRaises(ValueError) as context:
+                make_deposit(VALID_ACCOUNT_NUM, -1234)
+
+            # Assert
+            expected = ValueError("Deposit amount must be greater than zero.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # Function returns string as expected
+
+    def test_make_deposit_valid(self):
+        # Arrange
+
+        with patch('builtins.input') as mock_input:
+            account_num = VALID_ACCOUNT_NUM
+            deposit_amount = 1234
+            mock_input.side_effect = [account_num, deposit_amount]
+            
+            # Act
+
+            actual = make_deposit(account_num, deposit_amount)
+            # Assert
+            expected = f"You have made a deposit of ${deposit_amount:,.2f} to account #{account_num}."
+            self.assertEqual(expected, actual)
+
+if __name__ == '__main__':
+    unittest.main()
