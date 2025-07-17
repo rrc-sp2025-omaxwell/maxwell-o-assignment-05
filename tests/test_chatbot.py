@@ -33,7 +33,7 @@ VALID_ACCOUNT_NUM = int(123456)
 class chatbot(unittest.TestCase):
 
     # ValueError / WRONG NUMBER TESTING
-    def test_get_account_number_ValueError(self)->int:
+    def test_get_account_number_not_in_dict(self)->int:
 
         # Arrange
         user_input = WRONG_NUM_INPUT
@@ -48,18 +48,18 @@ class chatbot(unittest.TestCase):
             self.assertEqual(str(expected), str(context.exception))
 
     # TypeError / NON NUMERIC TESTING    
-    def test_get_account_number_TypeError(self)->int:
+    def test_get_account_number_not_int(self)->int:
 
     # Arrange
         user_input = STRING_INPUT
         with patch('builtins.input', return_value=user_input):
             
             # Act
-            with self.assertRaises(ValueError) as context:
+            with self.assertRaises(TypeError) as context:
                 get_account_number()
 
             # Assert
-            expected = ValueError("Account number must be an int type.")
+            expected = TypeError("Account number must be an int type.")
             self.assertEqual(str(expected), str(context.exception))
 
     # IS VALID ACCOUNT TESTING

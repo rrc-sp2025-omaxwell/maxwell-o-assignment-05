@@ -41,13 +41,15 @@ def get_account_number()->int:
     """
     try:
         account_number = int(input("Enter account number: "))
-            
+
         if account_number in ACCOUNTS:
             return account_number
         else:
             raise ValueError("Account number entered does not exist.")
+
+
     except ValueError:
-        print ("Account number must be an int type.")
+        return "Account number must be an int type."
 
 def get_amount()->float:
     """Returns deposit amount as float when value above zero.
@@ -168,7 +170,7 @@ def chatbot():
     if task == "exit":
         print(f"Thank you for banking with {COMPANY_NAME}.")
 
-        # thank you msg lingers then clears.
+        # thank you msg lingers then clear
         time.sleep(5)
         os.system('cls' if os.name == 'nt' else 'clear')
 
