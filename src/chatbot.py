@@ -11,6 +11,8 @@ __author__ = "Owen Maxwell"
 __version__ = "1.0.0"
 __credits__ = "COMP-1327 Faculty"
 
+import time
+import os
 
 ACCOUNTS = {
     123456: {
@@ -37,40 +39,44 @@ def get_account_number()->int:
     returns:
         int: returns valid account numbers as an integer.
     """
-
-    account_number = input("Enter account number: ")
-    if type(account_number) != int:
-        raise TypeError("Account number must be an int type.")
+    try:
+        account_number = int(input("Enter account number: "))
             
-    if account_number in ACCOUNTS:
-        return account_number 
-    else:
-        raise ValueError("Account number entered does not exist.")
+        if account_number in ACCOUNTS:
+            return account_number
+        else:
+            raise ValueError("Account number entered does not exist.")
+    except ValueError:
+        print ("Account number must be an int type.")
 
 def get_amount()->float:
     """Returns deposit amount as float when value above zero.
    
     args:
-    input(int or float): user inout that must be above zero.
+    input(int or float): user input that must be above zero.
 
     returns:
         float: deposit amount as float.
     """
     # Accepts any data type as input, verifies type in next step
-    deposit_amount = input("Enter an amount:")
+    try:
+        deposit_amount = int(input("Enter an amount:"))
     
     # raises TypeError ONLY if type is str
-    if type(deposit_amount) == str:
-        raise TypeError("Amount must be a numeric type.")
+
+            
+        
+        # raises ValueError if less than or equal to zero.
+        if deposit_amount <= 0:
+            raise ValueError("Amount must be a value greater than zero.")
+        
+        else:
+            return deposit_amount
     
-    # raises ValueError if less than or equal to zero.
-    elif deposit_amount <= 0:
-        raise ValueError("Amount must be a value greater than zero.")
+    except TypeError:
+     print("Amount must be a numeric type.")
     
-    else:
-        return deposit_amount
-    
-def get_balance(account_num: int) -> str:
+def get_balance(account_number: int) -> str:
     """
     Returns a balance statement as a string containing
     account number and balance in a currency format.
@@ -81,18 +87,21 @@ def get_balance(account_num: int) -> str:
     returns:
         string: a string containing the balance of the input account
     """
-    account_num = input("Please input an account number: ")
+   
+    try:
+        type(account_number) == int
+    
+        
+        if account_number not in ACCOUNTS:
+            raise ValueError("Account number entered does not exist.")
+        
+        else:
+            balance = ACCOUNTS[account_number]["balance"]
+            balance_formatted = f"${balance:,.2f}"
+            return f"Your current balance for account {account_number} is {balance_formatted}."
 
-    if type(account_num) != int:
-        raise TypeError("Account number must be an int type.")
-    
-    elif account_num not in ACCOUNTS:
-        raise ValueError("Account number entered does not exist.")
-    
-    else:
-        balance = ACCOUNTS[account_num]["balance"]
-        balance_formatted = f"${balance:,.2f}"
-        return f"Your current balance for account {account_num} is {balance_formatted}."
+    except TypeError:
+        print("Account number must be an int type.")
 
 def make_deposit(account_num: int, deposit_amount: int) -> str:
     """Returns a string containing an account number and amount deposited.
@@ -105,9 +114,6 @@ def make_deposit(account_num: int, deposit_amount: int) -> str:
         A string containing an account number and amount deposited.
     
     """
-    account_num = input("Please input an account number: ")
-    deposit_amount = input("Please input an deposit amount: ")
-    
 
     if type(account_num) != int:
         raise TypeError("Account number must be an int type.")
@@ -154,9 +160,54 @@ def chatbot():
     # Print welcome message
     print(f"Welcome! I'm the {COMPANY_NAME} Chatbot! "
           f"Let's get chatting!")
+    
+        # select menu option
+    task = get_task()
+    
+        # Print thank you message
+    if task == "exit":
+        print(f"Thank you for banking with {COMPANY_NAME}.")
 
-    # Print thank you message
-    print(f"Thank you for banking with {COMPANY_NAME}.")
+        # thank you msg lingers then clears.
+        time.sleep(5)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    
+    else:
+        # verify acc num in dictionary
+        account_number = get_account_number()
+        if account_number in ACCOUNTS:
+            if task == "deposit":
+                # make deposit
+                # deposit amount
+                amount = get_amount()
+                # deposit msg and wait
+                print(make_deposit(account_number, amount))
+                time.sleep(3)
+
+                # calc new balance
+                ACCOUNTS[account_number]["balance"] += amount
+                print(get_balance(account_number))
+
+                # balance msg lingers then returns to start
+                time.sleep(5)
+                os.system('cls' if os.name == 'nt' else 'clear')
+
+                # return to start
+                chatbot()
+            elif task == "balance":
+
+                # get balance
+                print(get_balance(account_number))
+
+                
+                time.sleep(3)
+                os.system('cls' if os.name == 'nt' else 'clear')
+
+                # return to start
+                chatbot()
+                
+
 
 if __name__ == "__main__":
     chatbot()

@@ -55,11 +55,11 @@ class chatbot(unittest.TestCase):
         with patch('builtins.input', return_value=user_input):
             
             # Act
-            with self.assertRaises(TypeError) as context:
+            with self.assertRaises(ValueError) as context:
                 get_account_number()
 
             # Assert
-            expected = TypeError("Account number must be an int type.")
+            expected = ValueError("Account number must be an int type.")
             self.assertEqual(str(expected), str(context.exception))
 
     # IS VALID ACCOUNT TESTING
