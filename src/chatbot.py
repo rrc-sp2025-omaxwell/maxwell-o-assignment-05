@@ -139,10 +139,12 @@ def get_task():
         a string containing the desired task 
 
     """
-    task = input("What would you like to do (balance/deposit/exit)?: ")
-
+    task_input = input("What would you like to do (balance/deposit/exit)?: ")
+    task = task_input.lower()
     if task not in VALID_TASKS:
         raise ValueError(f"{task} is an unknown task.")
+    
+    return task
 
 
 def chatbot():

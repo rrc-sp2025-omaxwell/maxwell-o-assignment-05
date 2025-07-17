@@ -13,7 +13,7 @@ Example:
 import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
-from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount, get_balance, make_deposit
+from src.chatbot import ACCOUNTS, VALID_TASKS, get_account_number, get_amount, get_balance, make_deposit, get_task
 
 
 #import sys
@@ -272,6 +272,36 @@ class chatbot(unittest.TestCase):
             # Assert
             expected = f"You have made a deposit of ${deposit_amount:,.2f} to account #{account_num}."
             self.assertEqual(expected, actual)
+
+    # get_task testing
+
+    # raise exception when task is invalid
+    def test_get_task_invalid(self)->str:
+        # arrange
+        task_input = STRING_INPUT
+        with patch('builtins.input', return_value = task_input):
+            
+            # Act
+            with self.assertRaises(ValueError) as context:
+                get_task()
+
+            #assert
+            expected = ValueError(f"{task_input} is an unknown task.")
+            self.assertEqual(str(expected), str(context.exception))
+
+    # Function returns valid task
+    def test_get_task_valid_entry(self)->str:
+        # arrange
+        task_input = "deposit"
+        with patch('builtins.input', return_value = task_input):
+            
+            # Act
+            actual = get_task()
+
+            #assert
+            expected = "deposit"
+            self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
